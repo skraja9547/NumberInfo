@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>DYNAMO V4.0 - ULTIMATE</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;900&family=Rajdhani:wght@500;700&display=swap');
+        :root { --neon: #ff003c; --bg: #000; }
+        body, html { margin: 0; padding: 0; width: 100%; height: 100%; background: var(--bg); color: #fff; font-family: 'Rajdhani', sans-serif; overflow: hidden; }
+
+        /* --- SERVER OFFLINE OVERLAY (New Feature) --- */
+        #offline-screen {
+            display: none; position: fixed; inset: 0; background: #000; z-index: 20000;
+            flex-direction: column; align-items: center; justify-content: center; text-align: center;
+        }
+        .skull-icon { font-size: 80px; color: var(--neon); margin-bottom: 20px; animation: flicker 1.5s infinite; }
+        .server-text { font-family: 'Orbitron'; font-size: 2.5rem; font-weight: 900; letter-spacing: 2px; }
+        .maint-text { color: #555; font-size: 0.9rem; margin-bottom: 40px; }
+        .contact-btn {
+            background: var(--neon); color: white; padding: 15px 40px; border-radius: 50px;
+            font-family: 'Orbitron'; font-weight: 700; text-transform: uppercase;
+            box-shadow: 0 0 20px rgba(255, 0, 60, 0.6); animation: pulse-red 2s infinite; text-decoration: none;
+        }
+        @keyframes pulse-red { 0% { transform: scale(1); } 70% { transform: scale(1.05); } 100% { transform: scale(1); } }
+        @keyframes flicker { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+
+        /* --- TOP PREMIUM HEADER SYSTEM --- */
+        .terminal-header {
+            position: fixed; top: 0; left: 0; width: 100%; background: rgba(0,0,0,0.9);
+            border-bottom: 2px solid var(--neon); padding: 15px 20px; z-index: 1000;
+            display: flex; justify-content: space-between; align-items: center;
+            box-shadow: 0 5px 20px rgba(255, 0, 60, 0.3);
+        }
+        .terminal-text {
+            font-family: 'Orbitron'; font-weight: 900; font-size: 1.2rem;
+            letter-spacing: 3px; color: var(--neon); text-shadow: 0 0 10px var(--neon);
+        }
+        .scan-line-top {
+            position: absolute; bottom: -2px; left: 0; width: 30%; height: 2px;
+            background: #fff; box-shadow: 0 0 15px #fff; animation: scanHeader 3s infinite linear;
+        }
+        @keyframes scanHeader { 0% { left: -30%; } 100% { left: 100%; } }
+
+        /* --- PREMIUM CREDIT BADGE --- */
+        .credit-badge-v4 {
+            background: linear-gradient(90deg, #1a0005, #4a000e);
+            border: 1px solid var(--neon); padding: 5px 12px; border-radius: 8px;
+            font-family: 'Orbitron'; font-size: 10px; color: #fff;
+            animation: pulseGlow 2s infinite;
+        }
+        @keyframes pulseGlow { 0%, 100% { box-shadow: 0 0 5px var(--neon); } 50% { box-shadow: 0 0 20px var(--neon); } }
+
+        /* --- LOGIN & SEARCH BUTTONS --- */
+        .cyber-btn {
+            background: linear-gradient(135deg, #70001a, #ff003c);
+            color: white; font-family: 'Orbitron'; padding: 18px; border-radius: 15px;
+            width: 100%; font-weight: 900; letter-spacing: 2px; text-transform: uppercase;
+            transition: 0.3s; border: 1px solid rgba(255,255,255,0.1);
+        }
+        .cyber-btn:active { transform: scale(0.95); filter: brightness(1.2); }
+
+        /* --- RESULT DATA SYSTEM --- */
+        .result-card {
+            background: #080808; border: 1px solid #1a1a1a; border-radius: 20px;
+            padding: 20px; margin-bottom: 20px; position: relative;
+            animation: slideIn 0.5s ease-out;
+        }
+        @keyframes slideIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .data-label { color: var(--neon); font-size: 10px; font-weight: 900; letter-spacing: 1px; }
+        .data-value { color: #ffffff; font-size: 1.1rem; font-weight: 700; margin-bottom: 12px; display: block; }
+        .address-box { background: #111; padding: 12px; border-radius: 10px; border: 1px solid #222; color: #ccc; font-size: 0.85rem; line-height: 1.6; }
+
+        /* --- MAP BUTTON ANIMATION --- */
+        .map-btn-premium {
+            position: absolute; top: 15px; right: 15px; width: 45px; height: 45px;
+            background: rgba(255,0,60,0.1); border: 1px solid var(--neon);
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            color: var(--neon); animation: mapRotate 4s linear infinite;
+        }
+        @keyframes mapRotate { 0% { transform: rotate(0deg) scale(1); } 50% { transform: rotate(180deg) scale(1.2); } 100% { transform: rotate(360deg) scale(1); } }
+
+        /* --- TELEGRAM OVERLAY --- */
+        #tg-redirect { display: none; position: fixed; inset: 0; background: #000; z-index: 10000; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+    </style>
+</head>
+<body>
+
+    <div id="offline-screen">
+        <i class="fas fa-skull-crossbones skull-icon"></i>
+        <h1 class="server-text">SERVER OFFLINE</h1>
+        <p class="maint-text">Maintenance in progress. Please try later.</p>
+        <a href="https://t.me/+QoT2mksz6s03MjVl" class="contact-btn">CONTACT ADMIN</a>
+    </div>
+
+    <div id="tg-redirect">
+        <div class="p-10 border border-red-600 rounded-3xl bg-zinc-950 mx-6">
+            <i class="fab fa-telegram text-red-600 text-7xl mb-6 animate-bounce"></i>
+            <h2 class="text-2xl font-['Orbitron'] mb-2">CREDITS EXHAUSTED</h2>
+            <p class="text-zinc-500 text-sm mb-8">Redirecting to Telegram for free credits...</p>
+            <div class="w-full bg-zinc-900 h-1.5 rounded-full overflow-hidden">
+                <div id="tg-bar" class="bg-red-600 h-full w-0"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="login-ui" class="h-full w-full flex flex-col justify-center p-8">
+        <div class="text-center mb-16">
+            <h1 class="text-6xl font-black italic font-['Orbitron'] text-white">HACK<span class="text-red-600">ER</span></h1>
+            <p class="text-[9px] tracking-[10px] text-zinc-700 uppercase mt-4">Security Protocol 4.0</p>
+        </div>
+        <div class="bg-zinc-950/50 p-8 rounded-[30px] border border-zinc-900">
+            <input type="password" id="uKey" class="w-full bg-black border border-zinc-800 p-5 rounded-2xl text-center text-xl text-white mb-6 outline-none focus:border-red-600 transition" placeholder="ACCESS KEY">
+            <button onclick="handleLogin()" class="cyber-btn">Login... </button>
+        </div>
+    </div>
+
+    <div id="app-ui" class="hidden h-full flex flex-col pt-24 px-6 overflow-hidden">
+        <header class="terminal-header">
+            <div class="scan-line-top"></div>
+            <div class="terminal-text">Number Info 🫣</div>
+            <div class="credit-badge-v4">LIMIT: <span id="uLimit">0</span></div>
+        </header>
+
+        <div class="bg-zinc-950/50 p-6 rounded-3xl border border-zinc-900 mb-8">
+            <p class="text-[9px] text-zinc-500 font-bold uppercase mb-2 tracking-widest">Target Database Search</p>
+            <input type="number" id="phone" class="w-full bg-black border border-zinc-800 p-5 rounded-2xl text-center text-2xl font-bold text-white mb-4 outline-none" placeholder="92XXXXXXXXXX">
+            <button onclick="executeDeepScan()" id="sBtn" class="cyber-btn text-sm">NUMBER SCAN</button>
+        </div>
+
+        <div id="res-area" class="flex-1 overflow-y-auto pb-10 space-y-5 pr-1"></div>
+    </div>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyAmClwusebf0pJA8lRv4OHIbD3be9CZA2A",
+            authDomain: "private-c54f7.firebaseapp.com",
+            databaseURL: "https://private-c54f7-default-rtdb.firebaseio.com",
+            projectId: "private-c54f7",
+            storageBucket: "private-c54f7.firebasestorage.app",
+            messagingSenderId: "757493440267",
+            appId: "1:757493440267:web:ad6684ae387d4adec84c0e"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+        let currentSessionK = "";
+
+        // REAL-TIME SYSTEM STATUS LISTENER
+        db.ref('system_status').on('value', snap => {
+            const offline = document.getElementById('offline-screen');
+            if(snap.val() === 'off') { offline.style.display = 'flex'; }
+            else { offline.style.display = 'none'; }
+        });
+
+        const deviceID = btoa(navigator.userAgent).substring(0, 16);
+
+        function handleLogin() {
+            const k = document.getElementById('uKey').value.trim();
+            if(!k) return;
+            
+            db.ref('keys/' + k).once('value', async s => {
+                if(s.exists() && s.val().status === 'active') {
+                    const data = s.val();
+                    if(Date.now() > data.expiry) return alert("KEY EXPIRED!");
+
+                    // Device Protection
+                    let deviceList = data.device_list || {};
+                    let isRegistered = Object.values(deviceList).includes(deviceID);
+                    if(!isRegistered) {
+                        if(data.devices_used >= data.device_limit) return alert("DEVICE LIMIT REACHED!");
+                        await db.ref('keys/' + k + '/device_list').push(deviceID);
+                        await db.ref('keys/' + k + '/devices_used').set((data.devices_used || 0) + 1);
+                    }
+
+                    if(data.limit <= 1) return startTelegramRedirect();
+                    currentSessionK = k;
+                    document.getElementById('login-ui').classList.add('hidden');
+                    document.getElementById('app-ui').classList.remove('hidden');
+                    document.getElementById('uLimit').innerText = data.limit;
+                } else { alert("ACCESS DENIED: KEY INVALID"); }
+            });
+        }
+
+        function startTelegramRedirect() {
+            document.getElementById('tg-redirect').style.display = 'flex';
+            let w = 0;
+            const bar = document.getElementById('tg-bar');
+            const timer = setInterval(() => {
+                w += 2;
+                bar.style.width = w + "%";
+                if(w >= 100) {
+                    clearInterval(timer);
+                    window.location.href = "https://t.me/+QoT2mksz6s03MjVl";
+                }
+            }, 80);
+        }
+
+        async function executeDeepScan() {
+            const num = document.getElementById('phone').value;
+            if(num.length < 10) return;
+
+            const s = await db.ref('keys/'+currentSessionK).get();
+            const lim = s.val().limit;
+            if(lim <= 1) return startTelegramRedirect();
+
+            document.getElementById('sBtn').innerText = "SCANNING DATABASE...";
+            db.ref('logs').push({ number: num, user: currentSessionK, time: new Date().toLocaleTimeString() });
+
+            try {
+                const r = await fetch(`https://api.b77bf911.workers.dev/mobile?number=${num}`);
+                const j = await r.json();
+                let raw = j.data?.data?.result || j.data;
+                let items = (Array.isArray(raw)) ? raw : (raw ? [raw] : []);
+
+                if(items.length > 0) {
+                    db.ref('keys/'+currentSessionK+'/limit').set(lim - 1);
+                    document.getElementById('uLimit').innerText = lim - 1;
+                    document.getElementById('res-area').innerHTML = "";
+                    items.forEach(i => {
+                        document.getElementById('res-area').innerHTML += `
+                        <div class="result-card">
+                            <div class="map-btn-premium" onclick="window.open('https://www.google.com/maps/search/${encodeURIComponent(i.address)}')">
+                                <i class="fas fa-crosshairs"></i>
+                            </div>
+                            <span class="data-label">Identity Registered Name</span>
+                            <span class="data-value text-red-500">${i.name || 'N/A'}</span>
+                            <span class="data-label">Cnic / Id Number</span>
+                            <span class="data-value font-mono">${i.id_number || 'N/A'}</span>
+                            <span class="data-label">Contact / Phone Number</span>
+                            <span class="data-value font-mono">${i.mobile || num}</span>
+                            <div class="address-box">
+                                <span class="data-label" style="color:#666">Residential Address</span>
+                                <p class="mt-1">${i.address || 'Address Restricted'}</p>
+                            </div>
+                        </div>`;
+                    });
+                } else { document.getElementById('res-area').innerHTML = "<p class='text-center opacity-20 py-20 tracking-widest'>NO ENCRYPTED DATA FOUND</p>"; }
+            } catch(e) { alert("CONNECTION ERROR"); }
+            document.getElementById('sBtn').innerText = "NUMBER SCAN";
+        }
+    </script>
+</body>
+</html>
