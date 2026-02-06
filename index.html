@@ -13,129 +13,122 @@
         :root { --neon: #ff003c; --bg: #000; }
         body, html { margin: 0; padding: 0; width: 100%; height: 100%; background: var(--bg); color: #fff; font-family: 'Rajdhani', sans-serif; overflow: hidden; }
 
-        /* --- SERVER OFFLINE OVERLAY (New Feature) --- */
-        #offline-screen {
-            display: none; position: fixed; inset: 0; background: #000; z-index: 20000;
-            flex-direction: column; align-items: center; justify-content: center; text-align: center;
-        }
-        .skull-icon { font-size: 80px; color: var(--neon); margin-bottom: 20px; animation: flicker 1.5s infinite; }
-        .server-text { font-family: 'Orbitron'; font-size: 2.5rem; font-weight: 900; letter-spacing: 2px; }
-        .maint-text { color: #555; font-size: 0.9rem; margin-bottom: 40px; }
-        .contact-btn {
-            background: var(--neon); color: white; padding: 15px 40px; border-radius: 50px;
-            font-family: 'Orbitron'; font-weight: 700; text-transform: uppercase;
-            box-shadow: 0 0 20px rgba(255, 0, 60, 0.6); animation: pulse-red 2s infinite; text-decoration: none;
-        }
-        @keyframes pulse-red { 0% { transform: scale(1); } 70% { transform: scale(1.05); } 100% { transform: scale(1); } }
-        @keyframes flicker { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+        /* --- REDIRECT SCREEN --- */
+        #tg-redirect { display: none; position: fixed; inset: 0; background: #000; z-index: 20000; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+        .tg-loader { width: 80px; height: 80px; border: 3px solid transparent; border-top-color: var(--neon); border-radius: 50%; animation: spin 1s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
 
-        /* --- TOP PREMIUM HEADER SYSTEM --- */
-        .terminal-header {
-            position: fixed; top: 0; left: 0; width: 100%; background: rgba(0,0,0,0.9);
-            border-bottom: 2px solid var(--neon); padding: 15px 20px; z-index: 1000;
-            display: flex; justify-content: space-between; align-items: center;
-            box-shadow: 0 5px 20px rgba(255, 0, 60, 0.3);
-        }
-        .terminal-text {
-            font-family: 'Orbitron'; font-weight: 900; font-size: 1.2rem;
-            letter-spacing: 3px; color: var(--neon); text-shadow: 0 0 10px var(--neon);
-        }
-        .scan-line-top {
-            position: absolute; bottom: -2px; left: 0; width: 30%; height: 2px;
-            background: #fff; box-shadow: 0 0 15px #fff; animation: scanHeader 3s infinite linear;
-        }
+        /* --- ADVANCE ALERT MODAL --- */
+        #custom-alert { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 10000; align-items: center; justify-content: center; backdrop-filter: blur(10px); }
+        .alert-box { background: #080808; border: 2px solid var(--neon); padding: 30px; border-radius: 20px; text-align: center; max-width: 80%; animation: alertPop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        @keyframes alertPop { from { transform: scale(0.5); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+        /* --- OFFLINE SCREEN --- */
+        #offline-screen { display: none; position: fixed; inset: 0; background: #000; z-index: 99999; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+        .skull-icon { font-size: 80px; color: var(--neon); margin-bottom: 20px; animation: flicker 1.5s infinite; }
+
+        /* --- LIVE TERMINAL LOGS DESIGN --- */
+        #live-logs { position: fixed; bottom: 10px; left: 10px; font-family: 'Courier New', monospace; font-size: 10px; color: #00ff41; opacity: 0.6; pointer-events: none; z-index: 500; }
+
+        /* --- TOP PREMIUM HEADER --- */
+        .terminal-header { position: fixed; top: 0; left: 0; width: 100%; background: rgba(0,0,0,0.95); border-bottom: 2px solid var(--neon); padding: 12px 20px; z-index: 1000; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 5px 25px rgba(255, 0, 60, 0.4); }
+        .terminal-text { font-family: 'Orbitron'; font-weight: 900; font-size: 1.1rem; letter-spacing: 2px; color: var(--neon); text-shadow: 0 0 10px var(--neon); }
+        .scan-line-top { position: absolute; bottom: -2px; left: 0; width: 30%; height: 2px; background: #fff; box-shadow: 0 0 15px #fff; animation: scanHeader 3s infinite linear; }
         @keyframes scanHeader { 0% { left: -30%; } 100% { left: 100%; } }
 
-        /* --- PREMIUM CREDIT BADGE --- */
-        .credit-badge-v4 {
-            background: linear-gradient(90deg, #1a0005, #4a000e);
-            border: 1px solid var(--neon); padding: 5px 12px; border-radius: 8px;
-            font-family: 'Orbitron'; font-size: 10px; color: #fff;
-            animation: pulseGlow 2s infinite;
-        }
-        @keyframes pulseGlow { 0%, 100% { box-shadow: 0 0 5px var(--neon); } 50% { box-shadow: 0 0 20px var(--neon); } }
+        /* --- BUTTONS & INPUTS --- */
+        .cyber-btn { background: linear-gradient(135deg, #70001a, #ff003c); color: white; font-family: 'Orbitron'; padding: 14px; border-radius: 12px; width: 100%; font-weight: 900; letter-spacing: 2px; text-transform: uppercase; transition: 0.3s; border: 1px solid rgba(255,255,255,0.1); font-size: 0.8rem; }
+        .cyber-btn:active { transform: scale(0.92); }
+        .compact-input { background: #050505; border: 1px solid #222; padding: 12px; border-radius: 12px; width: 100%; text-align: center; color: white; font-size: 1.4rem; font-weight: bold; outline: none; transition: 0.3s; margin-bottom: 10px; }
 
-        /* --- LOGIN & SEARCH BUTTONS --- */
-        .cyber-btn {
-            background: linear-gradient(135deg, #70001a, #ff003c);
-            color: white; font-family: 'Orbitron'; padding: 18px; border-radius: 15px;
-            width: 100%; font-weight: 900; letter-spacing: 2px; text-transform: uppercase;
-            transition: 0.3s; border: 1px solid rgba(255,255,255,0.1);
-        }
-        .cyber-btn:active { transform: scale(0.95); filter: brightness(1.2); }
+        /* --- MAP ICON --- */
+        .map-icon { position: absolute; top: 15px; right: 15px; font-size: 22px; color: var(--neon); cursor: pointer; animation: mapPulse 2s infinite; transition: 0.3s; z-index: 10; }
+        @keyframes mapPulse { 0% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.1); opacity: 0.7; } 100% { transform: scale(1); opacity: 1; } }
 
-        /* --- RESULT DATA SYSTEM --- */
-        .result-card {
-            background: #080808; border: 1px solid #1a1a1a; border-radius: 20px;
-            padding: 20px; margin-bottom: 20px; position: relative;
-            animation: slideIn 0.5s ease-out;
-        }
-        @keyframes slideIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        .data-label { color: var(--neon); font-size: 10px; font-weight: 900; letter-spacing: 1px; }
-        .data-value { color: #ffffff; font-size: 1.1rem; font-weight: 700; margin-bottom: 12px; display: block; }
-        .address-box { background: #111; padding: 12px; border-radius: 10px; border: 1px solid #222; color: #ccc; font-size: 0.85rem; line-height: 1.6; }
-
-        /* --- MAP BUTTON ANIMATION --- */
-        .map-btn-premium {
-            position: absolute; top: 15px; right: 15px; width: 45px; height: 45px;
-            background: rgba(255,0,60,0.1); border: 1px solid var(--neon);
-            border-radius: 50%; display: flex; align-items: center; justify-content: center;
-            color: var(--neon); animation: mapRotate 4s linear infinite;
-        }
-        @keyframes mapRotate { 0% { transform: rotate(0deg) scale(1); } 50% { transform: rotate(180deg) scale(1.2); } 100% { transform: rotate(360deg) scale(1); } }
-
-        /* --- TELEGRAM OVERLAY --- */
-        #tg-redirect { display: none; position: fixed; inset: 0; background: #000; z-index: 10000; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+        /* --- DATA CARDS --- */
+        .result-card { background: linear-gradient(180deg, #0a0a0a 0%, #050505 100%); border: 1px solid #1a1a1a; border-radius: 20px; padding: 18px; margin-bottom: 15px; position: relative; animation: slideIn 0.5s ease-out; border-left: 4px solid var(--neon); }
+        .data-label { color: var(--neon); font-size: 9px; font-weight: 900; letter-spacing: 1.5px; text-transform: uppercase; opacity: 0.8; }
+        .data-value { color: #ffffff; font-size: 1rem; font-weight: 700; margin-bottom: 10px; display: block; }
+        .address-text { font-size: 1.15rem !important; color: #fff !important; line-height: 1.4; font-weight: 600; text-shadow: 0 0 5px rgba(255,255,255,0.2); }
+        
+        .logout-btn { background: rgba(255,0,60,0.05); border: 1px solid #300; color: #600; padding: 6px 12px; border-radius: 6px; font-family: 'Orbitron'; font-size: 9px; margin-bottom: 15px; display: inline-block; }
+        
+        @keyframes flicker { 0%, 100% { opacity: 1; filter: drop-shadow(0 0 10px var(--neon)); } 50% { opacity: 0.4; } }
+        @keyframes slideIn { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
 
-    <div id="offline-screen">
-        <i class="fas fa-skull-crossbones skull-icon"></i>
-        <h1 class="server-text">SERVER OFFLINE</h1>
-        <p class="maint-text">Maintenance in progress. Please try later.</p>
-        <a href="https://t.me/+QoT2mksz6s03MjVl" class="contact-btn">CONTACT ADMIN</a>
-    </div>
+    <div id="live-logs"></div>
 
     <div id="tg-redirect">
-        <div class="p-10 border border-red-600 rounded-3xl bg-zinc-950 mx-6">
-            <i class="fab fa-telegram text-red-600 text-7xl mb-6 animate-bounce"></i>
-            <h2 class="text-2xl font-['Orbitron'] mb-2">CREDITS EXHAUSTED</h2>
-            <p class="text-zinc-500 text-sm mb-8">Redirecting to Telegram for free credits...</p>
-            <div class="w-full bg-zinc-900 h-1.5 rounded-full overflow-hidden">
-                <div id="tg-bar" class="bg-red-600 h-full w-0"></div>
-            </div>
+        <div class="tg-loader mb-6 shadow-[0_0_20px_var(--neon)]"></div>
+        <h2 class="text-3xl font-black font-['Orbitron'] text-white animate-pulse">SYSTEM BREACHED</h2>
+        <p class="text-red-500 mt-2 mb-8 tracking-[5px] uppercase text-[10px]">Access Denied: Credits Empty</p>
+        <div class="p-6 border-2 border-red-600 rounded-3xl bg-zinc-950 mx-10 shadow-[0_0_30px_rgba(255,0,60,0.2)]">
+            <i class="fab fa-telegram text-blue-500 text-6xl mb-4 animate-bounce"></i>
+            <h3 class="text-white font-bold mb-2">RECHARGE REQUIRED</h3>
+            <p class="text-xs text-zinc-400">Join our Telegram for instant free credits and premium tools access.</p>
         </div>
     </div>
 
-    <div id="login-ui" class="h-full w-full flex flex-col justify-center p-8">
-        <div class="text-center mb-16">
+    <div id="custom-alert">
+        <div class="alert-box">
+            <i class="fas fa-shield-halved text-red-600 text-4xl mb-4"></i>
+            <h3 class="font-['Orbitron'] text-white text-lg mb-2" id="alert-title">TERMINAL MSG</h3>
+            <p class="text-zinc-400 text-sm mb-6" id="alert-msg"></p>
+            <button onclick="closeAlert()" class="cyber-btn py-2">PROCEED</button>
+        </div>
+    </div>
+
+    <div id="offline-screen">
+        <i class="fas fa-skull-crossbones skull-icon"></i>
+        <h1 class="text-4xl font-black italic font-['Orbitron'] text-white">OFFLINE</h1>
+        <a href="https://t.me/+QoT2mksz6s03MjVl" class="cyber-btn w-auto px-12 mt-10">Admin Support</a>
+    </div>
+
+    <div id="login-ui" class="h-full w-full flex flex-col justify-center p-10">
+        <div class="text-center mb-12">
             <h1 class="text-6xl font-black italic font-['Orbitron'] text-white">HACK<span class="text-red-600">ER</span></h1>
-            <p class="text-[9px] tracking-[10px] text-zinc-700 uppercase mt-4">Security Protocol 4.0</p>
+            <p class="text-[8px] tracking-[12px] text-zinc-600 uppercase mt-4">V4.0 Ultra Premium</p>
         </div>
-        <div class="bg-zinc-950/50 p-8 rounded-[30px] border border-zinc-900">
-            <input type="password" id="uKey" class="w-full bg-black border border-zinc-800 p-5 rounded-2xl text-center text-xl text-white mb-6 outline-none focus:border-red-600 transition" placeholder="ACCESS KEY">
-            <button onclick="handleLogin()" class="cyber-btn">Login... </button>
+        <div class="bg-zinc-950/50 p-8 rounded-[40px] border border-zinc-900 shadow-2xl relative">
+            <div class="absolute -top-2 -left-2 w-10 h-10 border-t-2 border-l-2 border-red-600 rounded-tl-xl"></div>
+            <input type="password" id="uKey" class="compact-input text-lg py-4 mb-6" placeholder="ACCESS KEY">
+            <button onclick="handleLogin()" class="cyber-btn shadow-[0_0_15px_rgba(255,0,60,0.3)]">Login.. </button>
         </div>
     </div>
 
-    <div id="app-ui" class="hidden h-full flex flex-col pt-24 px-6 overflow-hidden">
+    <div id="app-ui" class="hidden h-full flex flex-col pt-20 px-5 overflow-hidden">
         <header class="terminal-header">
             <div class="scan-line-top"></div>
-            <div class="terminal-text">Number Info 🫣</div>
-            <div class="credit-badge-v4">LIMIT: <span id="uLimit">0</span></div>
+            <div class="terminal-text">NUMBER DETAILS </div>
+            <div class="credit-badge-v4" style="background: linear-gradient(90deg, #1a0005, #4a000e); border: 1px solid var(--neon); padding: 5px 12px; border-radius: 8px; font-family: 'Orbitron'; font-size: 10px; color: #fff;">LIM: <span id="uLimit">0</span></div>
         </header>
 
-        <div class="bg-zinc-950/50 p-6 rounded-3xl border border-zinc-900 mb-8">
-            <p class="text-[9px] text-zinc-500 font-bold uppercase mb-2 tracking-widest">Target Database Search</p>
-            <input type="number" id="phone" class="w-full bg-black border border-zinc-800 p-5 rounded-2xl text-center text-2xl font-bold text-white mb-4 outline-none" placeholder="92XXXXXXXXXX">
-            <button onclick="executeDeepScan()" id="sBtn" class="cyber-btn text-sm">NUMBER SCAN</button>
+        <div onclick="logoutUser()" class="logout-btn mt-4"><i class="fas fa-power-off mr-2"></i> DISCONNECT</div>
+
+        <div class="bg-zinc-950/40 p-4 rounded-[25px] border border-zinc-900 mb-6 relative">
+            <input type="number" id="phone" class="compact-input" placeholder="9933******" style="font-size: 1.2rem; padding: 10px;">
+            <button onclick="executeDeepScan()" id="sBtn" class="cyber-btn text-[10px]">🔍 Search  </button>
         </div>
 
-        <div id="res-area" class="flex-1 overflow-y-auto pb-10 space-y-5 pr-1"></div>
+        <div id="res-area" class="flex-1 overflow-y-auto pb-24 space-y-4"></div>
     </div>
 
     <script>
+        // Live Log Animation
+        const logs = [
+            "Initializing kernel...", "Connecting to Proxy...", "Bypassing SSL...",
+            "Loading Database 4.0...", "Ready to Scan...", "Packet sniffing...",
+            "Decrypting Metadata...", "Fetching API Nodes...", "Terminal Secure."
+        ];
+        setInterval(() => {
+            const logBox = document.getElementById('live-logs');
+            logBox.innerHTML = `> ${logs[Math.floor(Math.random() * logs.length)]}<br>` + logBox.innerHTML.substring(0, 100);
+        }, 2000);
+
+        const _0x4f2 = atob("aHR0cHM6Ly9hcGkuYjc3YmY5MTEud29ya2Vycy5kZXYvbW9iaWxlP251bWJlcj0=");
         const firebaseConfig = {
             apiKey: "AIzaSyAmClwusebf0pJA8lRv4OHIbD3be9CZA2A",
             authDomain: "private-c54f7.firebaseapp.com",
@@ -149,98 +142,102 @@
         const db = firebase.database();
         let currentSessionK = "";
 
-        // REAL-TIME SYSTEM STATUS LISTENER
+        function showAlert(title, msg) {
+            document.getElementById('alert-title').innerText = title;
+            document.getElementById('alert-msg').innerText = msg;
+            document.getElementById('custom-alert').style.display = 'flex';
+        }
+        function closeAlert() { document.getElementById('custom-alert').style.display = 'none'; }
+
+        function triggerRedirect() {
+            document.getElementById('tg-redirect').style.display = 'flex';
+            setTimeout(() => {
+                window.location.href = "https://t.me/+QoT2mksz6s03MjVl";
+            }, 3000);
+        }
+
         db.ref('system_status').on('value', snap => {
-            const offline = document.getElementById('offline-screen');
-            if(snap.val() === 'off') { offline.style.display = 'flex'; }
-            else { offline.style.display = 'none'; }
+            document.getElementById('offline-screen').style.display = (snap.val() === 'off') ? 'flex' : 'none';
         });
 
-        const deviceID = btoa(navigator.userAgent).substring(0, 16);
+        window.onload = () => {
+            const saved = localStorage.getItem('hacker_key');
+            if(saved) document.getElementById('uKey').value = saved;
+        }
 
         function handleLogin() {
             const k = document.getElementById('uKey').value.trim();
-            if(!k) return;
-            
-            db.ref('keys/' + k).once('value', async s => {
+            if(!k) return showAlert("ERROR", "Access key is required!");
+            db.ref('keys/' + k).once('value', s => {
                 if(s.exists() && s.val().status === 'active') {
-                    const data = s.val();
-                    if(Date.now() > data.expiry) return alert("KEY EXPIRED!");
-
-                    // Device Protection
-                    let deviceList = data.device_list || {};
-                    let isRegistered = Object.values(deviceList).includes(deviceID);
-                    if(!isRegistered) {
-                        if(data.devices_used >= data.device_limit) return alert("DEVICE LIMIT REACHED!");
-                        await db.ref('keys/' + k + '/device_list').push(deviceID);
-                        await db.ref('keys/' + k + '/devices_used').set((data.devices_used || 0) + 1);
-                    }
-
-                    if(data.limit <= 1) return startTelegramRedirect();
+                    if(s.val().limit < 1) return triggerRedirect();
                     currentSessionK = k;
+                    localStorage.setItem('hacker_key', k);
                     document.getElementById('login-ui').classList.add('hidden');
                     document.getElementById('app-ui').classList.remove('hidden');
-                    document.getElementById('uLimit').innerText = data.limit;
-                } else { alert("ACCESS DENIED: KEY INVALID"); }
+                    document.getElementById('uLimit').innerText = s.val().limit;
+                } else { showAlert("DENIED", "Key is invalid or expired."); }
             });
         }
 
-        function startTelegramRedirect() {
-            document.getElementById('tg-redirect').style.display = 'flex';
-            let w = 0;
-            const bar = document.getElementById('tg-bar');
-            const timer = setInterval(() => {
-                w += 2;
-                bar.style.width = w + "%";
-                if(w >= 100) {
-                    clearInterval(timer);
-                    window.location.href = "https://t.me/+QoT2mksz6s03MjVl";
-                }
-            }, 80);
+        function logoutUser() {
+            document.getElementById('app-ui').classList.add('hidden');
+            document.getElementById('login-ui').classList.remove('hidden');
         }
 
         async function executeDeepScan() {
             const num = document.getElementById('phone').value;
-            if(num.length < 10) return;
+            if(num.length < 10) return showAlert("INVALID", "Enter a valid number.");
 
             const s = await db.ref('keys/'+currentSessionK).get();
             const lim = s.val().limit;
-            if(lim <= 1) return startTelegramRedirect();
+            
+            if(lim < 1) return triggerRedirect();
 
-            document.getElementById('sBtn').innerText = "SCANNING DATABASE...";
-            db.ref('logs').push({ number: num, user: currentSessionK, time: new Date().toLocaleTimeString() });
-
+            document.getElementById('sBtn').innerText = "EXPLOITING DATABASE...";
+            
             try {
-                const r = await fetch(`https://api.b77bf911.workers.dev/mobile?number=${num}`);
+                const r = await fetch(_0x4f2 + num);
                 const j = await r.json();
-                let raw = j.data?.data?.result || j.data;
-                let items = (Array.isArray(raw)) ? raw : (raw ? [raw] : []);
+                let raw = j.data?.data?.result || j.data || j;
+                let items = (Array.isArray(raw)) ? raw : [raw];
 
-                if(items.length > 0) {
+                if(items[0] && items[0].name) {
                     db.ref('keys/'+currentSessionK+'/limit').set(lim - 1);
                     document.getElementById('uLimit').innerText = lim - 1;
                     document.getElementById('res-area').innerHTML = "";
+                    
                     items.forEach(i => {
+                        let familyData = "";
+                        for(let key in i) {
+                            if(!['name','id_number','mobile','address'].includes(key) && i[key] && typeof i[key] !== 'object') {
+                                let label = key.replace(/_/g, ' ').toUpperCase();
+                                familyData += `<span class="data-label">${label}</span><span class="data-value">${i[key]}</span>`;
+                            }
+                        }
+
                         document.getElementById('res-area').innerHTML += `
                         <div class="result-card">
-                            <div class="map-btn-premium" onclick="window.open('https://www.google.com/maps/search/${encodeURIComponent(i.address)}')">
-                                <i class="fas fa-crosshairs"></i>
-                            </div>
-                            <span class="data-label">Identity Registered Name</span>
-                            <span class="data-value text-red-500">${i.name || 'N/A'}</span>
-                            <span class="data-label">Cnic / Id Number</span>
+                            <i class="fas fa-location-dot map-icon" onclick="window.open('http://googleusercontent.com/maps.google.com/maps?q='+encodeURIComponent(i.address || 'Pakistan'))"></i>
+                            <span class="data-label">Identity Name</span>
+                            <span class="data-value text-red-500">${i.name}</span>
+                            <span class="data-label">CNIC / NIC</span>
                             <span class="data-value font-mono">${i.id_number || 'N/A'}</span>
-                            <span class="data-label">Contact / Phone Number</span>
-                            <span class="data-value font-mono">${i.mobile || num}</span>
-                            <div class="address-box">
-                                <span class="data-label" style="color:#666">Residential Address</span>
-                                <p class="mt-1">${i.address || 'Address Restricted'}</p>
+                            <span class="data-label">Target Mobile</span>
+                            <span class="data-value font-mono text-green-500">${i.mobile || num}</span>
+                            ${familyData}
+                            <div class="address-box mt-3 border-t border-zinc-900 pt-3">
+                                <span class="data-label">Residential Address</span>
+                                <p class="address-text mt-1 font-bold">${i.address || 'Address Restricted'}</p>
                             </div>
                         </div>`;
                     });
-                } else { document.getElementById('res-area').innerHTML = "<p class='text-center opacity-20 py-20 tracking-widest'>NO ENCRYPTED DATA FOUND</p>"; }
-            } catch(e) { alert("CONNECTION ERROR"); }
-            document.getElementById('sBtn').innerText = "NUMBER SCAN";
+                    
+                    if(lim - 1 < 1) { setTimeout(() => { triggerRedirect(); }, 1500); }
+
+                } else { showAlert("NOT FOUND", "Target not in database."); }
+            } catch(e) { showAlert("FAILED", "Connection Interrupted."); }
+            document.getElementById('sBtn').innerText = "INITIALIZE DEEP SCAN";
         }
     </script>
 </body>
