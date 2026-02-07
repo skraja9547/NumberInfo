@@ -1,244 +1,192 @@
+<?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE html>
-<html lang="en">
+<html b:css='false' b:defaultwidgetversion='2' b:layoutsversion='3' xmlns='http://www.w3.org/1999/xhtml' xmlns:b='http://www.google.com/2005/gml/b' xmlns:data='http://www.google.com/atom/data' xmlns:expr='http://www.google.com/2005/gml/expr'>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>DYNAMO V4.0 - ULTIMATE</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;900&family=Rajdhani:wght@500;700&display=swap');
-        :root { --neon: #ff003c; --bg: #000; }
-        body, html { margin: 0; padding: 0; width: 100%; height: 100%; background: var(--bg); color: #fff; font-family: 'Rajdhani', sans-serif; overflow: hidden; }
+<title>DYNAMO V25 - PRIVATE TERMINAL</title>
+<meta charset='UTF-8'/>
+<meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover' name='viewport'/>
 
-        /* --- REDIRECT SCREEN --- */
-        #tg-redirect { display: none; position: fixed; inset: 0; background: #000; z-index: 20000; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
-        .tg-loader { width: 80px; height: 80px; border: 3px solid transparent; border-top-color: var(--neon); border-radius: 50%; animation: spin 1s linear infinite; }
-        @keyframes spin { to { transform: rotate(360deg); } }
+<script src='https://cdn.tailwindcss.com'></script>
+<script src='https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js'></script>
+<script src='https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js'></script>
+<link href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css' rel='stylesheet'/>
 
-        /* --- ADVANCE ALERT MODAL --- */
-        #custom-alert { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 10000; align-items: center; justify-content: center; backdrop-filter: blur(10px); }
-        .alert-box { background: #080808; border: 2px solid var(--neon); padding: 30px; border-radius: 20px; text-align: center; max-width: 80%; animation: alertPop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-        @keyframes alertPop { from { transform: scale(0.5); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@500;600;700&display=swap');
+body { background: #000; font-family: 'Rajdhani', sans-serif; color: #fff; margin: 0; padding: 0; overflow-x: hidden; }
 
-        /* --- OFFLINE SCREEN --- */
-        #offline-screen { display: none; position: fixed; inset: 0; background: #000; z-index: 99999; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
-        .skull-icon { font-size: 80px; color: var(--neon); margin-bottom: 20px; animation: flicker 1.5s infinite; }
+/* --- 3D Grid Mini-Boxes --- */
+.results-wrapper { margin-top: 20px; border-top: 1px solid #1a1a1a; padding-top: 20px; }
+.family-member-header { background: #ff3131; color: #000; font-family: 'Orbitron'; font-weight: 900; font-size: 10px; padding: 4px 12px; border-radius: 50px; width: fit-content; margin-bottom: 15px; box-shadow: 0 0 15px #ff3131; }
 
-        /* --- LIVE TERMINAL LOGS DESIGN --- */
-        #live-logs { position: fixed; bottom: 10px; left: 10px; font-family: 'Courier New', monospace; font-size: 10px; color: #00ff41; opacity: 0.6; pointer-events: none; z-index: 500; }
+.grid-3d { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 30px; }
+.box-3d { 
+    background: linear-gradient(145deg, #111, #080808); 
+    border: 1px solid rgba(255, 49, 49, 0.2); 
+    border-radius: 18px; padding: 12px; 
+    box-shadow: 6px 6px 12px #000, inset 2px 2px 5px rgba(255,49,49,0.05); 
+}
+.full-w { grid-column: span 2; }
+.label-3d { font-family: 'Orbitron'; font-size: 8px; color: #ff3131; letter-spacing: 1px; text-transform: uppercase; display: block; margin-bottom: 3px; }
+.value-3d { font-size: 15px; font-weight: 700; color: #fff; }
 
-        /* --- TOP PREMIUM HEADER --- */
-        .terminal-header { position: fixed; top: 0; left: 0; width: 100%; background: rgba(0,0,0,0.95); border-bottom: 2px solid var(--neon); padding: 12px 20px; z-index: 1000; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 5px 25px rgba(255, 0, 60, 0.4); }
-        .terminal-text { font-family: 'Orbitron'; font-weight: 900; font-size: 1.1rem; letter-spacing: 2px; color: var(--neon); text-shadow: 0 0 10px var(--neon); }
-        .scan-line-top { position: absolute; bottom: -2px; left: 0; width: 30%; height: 2px; background: #fff; box-shadow: 0 0 15px #fff; animation: scanHeader 3s infinite linear; }
-        @keyframes scanHeader { 0% { left: -30%; } 100% { left: 100%; } }
+.icon-3d { width: 120px; height: 120px; border-radius: 50%; border: 3px solid #ff3131; box-shadow: 0 0 30px rgba(255, 49, 49, 0.6); animation: floating 3s ease-in-out infinite; margin: 0 auto 20px; display: block; }
+@keyframes floating { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-12px); } }
 
-        /* --- BUTTONS & INPUTS --- */
-        .cyber-btn { background: linear-gradient(135deg, #70001a, #ff003c); color: white; font-family: 'Orbitron'; padding: 14px; border-radius: 12px; width: 100%; font-weight: 900; letter-spacing: 2px; text-transform: uppercase; transition: 0.3s; border: 1px solid rgba(255,255,255,0.1); font-size: 0.8rem; }
-        .cyber-btn:active { transform: scale(0.92); }
-        .compact-input { background: #050505; border: 1px solid #222; padding: 12px; border-radius: 12px; width: 100%; text-align: center; color: white; font-size: 1.4rem; font-weight: bold; outline: none; transition: 0.3s; margin-bottom: 10px; }
+.card-premium { background: #0a0a0a; border: 1px solid rgba(255,49,49,0.3); border-radius: 40px; }
+.btn-main { background: linear-gradient(180deg, #ff3131 0%, #b30000 100%); color: white; padding: 18px; border-radius: 25px; width: 100%; font-family: 'Orbitron'; font-weight: 900; cursor: pointer; transition: 0.3s; }
+.btn-main:active { transform: scale(0.95); }
 
-        /* --- MAP ICON --- */
-        .map-icon { position: absolute; top: 15px; right: 15px; font-size: 22px; color: var(--neon); cursor: pointer; animation: mapPulse 2s infinite; transition: 0.3s; z-index: 10; }
-        @keyframes mapPulse { 0% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.1); opacity: 0.7; } 100% { transform: scale(1); opacity: 1; } }
-
-        /* --- DATA CARDS --- */
-        .result-card { background: linear-gradient(180deg, #0a0a0a 0%, #050505 100%); border: 1px solid #1a1a1a; border-radius: 20px; padding: 18px; margin-bottom: 15px; position: relative; animation: slideIn 0.5s ease-out; border-left: 4px solid var(--neon); }
-        .data-label { color: var(--neon); font-size: 9px; font-weight: 900; letter-spacing: 1.5px; text-transform: uppercase; opacity: 0.8; }
-        .data-value { color: #ffffff; font-size: 1rem; font-weight: 700; margin-bottom: 10px; display: block; }
-        .address-text { font-size: 1.15rem !important; color: #fff !important; line-height: 1.4; font-weight: 600; text-shadow: 0 0 5px rgba(255,255,255,0.2); }
-        
-        .logout-btn { background: rgba(255,0,60,0.05); border: 1px solid #300; color: #600; padding: 6px 12px; border-radius: 6px; font-family: 'Orbitron'; font-size: 9px; margin-bottom: 15px; display: inline-block; }
-        
-        @keyframes flicker { 0%, 100% { opacity: 1; filter: drop-shadow(0 0 10px var(--neon)); } 50% { opacity: 0.4; } }
-        @keyframes slideIn { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-    </style>
+#server-off-screen, #limit-screen { display:none; position:fixed; inset:0; z-index:999999; background:#000; flex-direction:column; align-items:center; justify-content:center; text-align:center; }
+</style>
 </head>
 <body>
 
-    <div id="live-logs"></div>
+<div id='server-off-screen'>
+    <i class='fas fa-skull-crossbones text-7xl text-red-600 mb-6'></i>
+    <h1 class='text-red-600 font-["Orbitron"] text-3xl font-black uppercase'>System Locked</h1>
+    <p class='text-zinc-500 mt-4'>Join Telegram for updates</p>
+    <button class='btn-main mt-8 !w-64' onclick="window.open('https://t.me/+3Id7YrNsxwhmNTBl')">JOIN TELEGRAM</button>
+</div>
 
-    <div id="tg-redirect">
-        <div class="tg-loader mb-6 shadow-[0_0_20px_var(--neon)]"></div>
-        <h2 class="text-3xl font-black font-['Orbitron'] text-white animate-pulse">SYSTEM BREACHED</h2>
-        <p class="text-red-500 mt-2 mb-8 tracking-[5px] uppercase text-[10px]">Access Denied: Credits Empty</p>
-        <div class="p-6 border-2 border-red-600 rounded-3xl bg-zinc-950 mx-10 shadow-[0_0_30px_rgba(255,0,60,0.2)]">
-            <i class="fab fa-telegram text-blue-500 text-6xl mb-4 animate-bounce"></i>
-            <h3 class="text-white font-bold mb-2">RECHARGE REQUIRED</h3>
-            <p class="text-xs text-zinc-400">Join our Telegram for instant free credits and premium tools access.</p>
+<div id='limit-screen'>
+    <i class="fas fa-hamburger text-8xl text-red-600 mb-6 animate-bounce"></i>
+    <h1 class='text-4xl font-black font-["Orbitron"]'>CREDITS FINISHED</h1>
+    <p class='text-zinc-400 mt-4 mb-10'>Get free credits from our channel.</p>
+    <a href='https://t.me/+3Id7YrNsxwhmNTBl' class='btn-main !bg-[#0088cc] !rounded-full !w-64'>JOIN TELEGRAM</a>
+    <p class='mt-8 text-zinc-600 uppercase tracking-widest text-xs'>Redirecting in <span id="countdown">3</span>s...</p>
+</div>
+
+<div id='app-screen' class='p-6'>
+    <header class='flex justify-between items-center mb-8'>
+        <div class='bg-red-600/10 border border-red-600/30 px-6 py-2 rounded-2xl'>
+            <span class='text-[10px] text-zinc-500 block uppercase'>Credits</span>
+            <span id='quotaDisplay' class='text-red-600 font-black text-xl font-["Orbitron"]'>0</span>
         </div>
+        <img src='https://i.ibb.co/9fFFGhK/icon.png' style="width:40px;"/>
+    </header>
+
+    <div id="login-box" class='card-premium p-10 text-center'>
+        <img src='https://i.ibb.co/9fFFGhK/icon.png' class='icon-3d'/>
+        <h1 class='font-["Orbitron"] font-black text-2xl mb-6'>Number <span class='text-red-600'>Info</span></h1>
+        <input id='keyInput' class='w-full bg-zinc-900 border border-zinc-800 p-4 rounded-2xl text-center mb-6 font-bold text-white' placeholder='ENTER ACCESS KEY' type='text'/>
+        <button class='btn-main' onclick='loginNow()'>Login.. </button>
     </div>
 
-    <div id="custom-alert">
-        <div class="alert-box">
-            <i class="fas fa-shield-halved text-red-600 text-4xl mb-4"></i>
-            <h3 class="font-['Orbitron'] text-white text-lg mb-2" id="alert-title">TERMINAL MSG</h3>
-            <p class="text-zinc-400 text-sm mb-6" id="alert-msg"></p>
-            <button onclick="closeAlert()" class="cyber-btn py-2">PROCEED</button>
+    <div id="main-content" class="hidden">
+        <div class='card-premium p-8 mb-8'>
+            <p class='text-[10px] text-center text-zinc-500 font-["Orbitron"] mb-4 uppercase tracking-widest'>Auto-Detecting System</p>
+            <input id='targetNumber' class='w-full bg-transparent text-center text-4xl font-bold text-red-600 mb-8 outline-none border-b border-zinc-800' placeholder='99328957**' type='number'/>
+            <button class='btn-main' onclick='startScan()'>START SCAN</button>
         </div>
+        <div id='resultsArea'></div>
     </div>
+</div>
 
-    <div id="offline-screen">
-        <i class="fas fa-skull-crossbones skull-icon"></i>
-        <h1 class="text-4xl font-black italic font-['Orbitron'] text-white">OFFLINE</h1>
-        <a href="https://t.me/+QoT2mksz6s03MjVl" class="cyber-btn w-auto px-12 mt-10">Admin Support</a>
-    </div>
+<script>
+//<![CDATA[
+// Security Masked Config
+const _0xdb = {
+    a: "QUl6YVN5QW1DbHd1c2ViZjBwSkE4bFJ2NE9ISWJEM2JlOUNaQTJB",
+    b: "cHJpdmF0ZS1jNTRmNy5maXJlYmFzZWFwcC5jb20=",
+    c: "aHR0cHM6Ly9wcml2YXRlLWM1NGY3LWRlZmF1bHQtcnRkYi5maXJlYmFzZWlvLmNvbQ==",
+    d: "cHJpdmF0ZS1jNTRmNw==",
+    e: "NzU3NDkzNDQwMjY3",
+    f: "MTo3NTc0OTM0NDAyNjc6d2ViOmFkNjY4NGFlMzg3ZDRhZGVjODRjMGU="
+};
 
-    <div id="login-ui" class="h-full w-full flex flex-col justify-center p-10">
-        <div class="text-center mb-12">
-            <h1 class="text-6xl font-black italic font-['Orbitron'] text-white">HACK<span class="text-red-600">ER</span></h1>
-            <p class="text-[8px] tracking-[12px] text-zinc-600 uppercase mt-4">V4.0 Ultra Premium</p>
-        </div>
-        <div class="bg-zinc-950/50 p-8 rounded-[40px] border border-zinc-900 shadow-2xl relative">
-            <div class="absolute -top-2 -left-2 w-10 h-10 border-t-2 border-l-2 border-red-600 rounded-tl-xl"></div>
-            <input type="password" id="uKey" class="compact-input text-lg py-4 mb-6" placeholder="ACCESS KEY">
-            <button onclick="handleLogin()" class="cyber-btn shadow-[0_0_15px_rgba(255,0,60,0.3)]">Login.. </button>
-        </div>
-    </div>
+const firebaseConfig = {
+    apiKey: atob(_0xdb.a),
+    authDomain: atob(_0xdb.b),
+    databaseURL: atob(_0xdb.c),
+    projectId: atob(_0xdb.d),
+    storageBucket: atob(_0xdb.d) + ".firebasestorage.app",
+    messagingSenderId: atob(_0xdb.e),
+    appId: atob(_0xdb.f)
+};
 
-    <div id="app-ui" class="hidden h-full flex flex-col pt-20 px-5 overflow-hidden">
-        <header class="terminal-header">
-            <div class="scan-line-top"></div>
-            <div class="terminal-text">NUMBER DETAILS </div>
-            <div class="credit-badge-v4" style="background: linear-gradient(90deg, #1a0005, #4a000e); border: 1px solid var(--neon); padding: 5px 12px; border-radius: 8px; font-family: 'Orbitron'; font-size: 10px; color: #fff;">LIM: <span id="uLimit">0</span></div>
-        </header>
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+const _0xap = "aHR0cHM6Ly9hcGkuYjc3YmY5MTEud29ya2Vycy5kZXYvbW9iaWxlP251bWJlcj0=";
 
-        <div onclick="logoutUser()" class="logout-btn mt-4"><i class="fas fa-power-off mr-2"></i> DISCONNECT</div>
+db.ref('system_status').on('value', s => {
+    document.getElementById('server-off-screen').style.display = (s.val() === 'off') ? 'flex' : 'none';
+});
 
-        <div class="bg-zinc-950/40 p-4 rounded-[25px] border border-zinc-900 mb-6 relative">
-            <input type="number" id="phone" class="compact-input" placeholder="9933******" style="font-size: 1.2rem; padding: 10px;">
-            <button onclick="executeDeepScan()" id="sBtn" class="cyber-btn text-[10px]">🔍 Search  </button>
-        </div>
+function loginNow() {
+    const k = document.getElementById('keyInput').value;
+    if(!k) return;
+    db.ref('keys/' + k).once('value', snap => {
+        if(snap.exists() && snap.val().status === 'active') {
+            localStorage.setItem('v25_auth', k);
+            document.getElementById('login-box').style.display = 'none';
+            document.getElementById('main-content').classList.remove('hidden');
+            syncCredits(k);
+        } else { alert("Invalid Key"); }
+    });
+}
 
-        <div id="res-area" class="flex-1 overflow-y-auto pb-24 space-y-4"></div>
-    </div>
-
-    <script>
-        // Live Log Animation
-        const logs = [
-            "Initializing kernel...", "Connecting to Proxy...", "Bypassing SSL...",
-            "Loading Database 4.0...", "Ready to Scan...", "Packet sniffing...",
-            "Decrypting Metadata...", "Fetching API Nodes...", "Terminal Secure."
-        ];
-        setInterval(() => {
-            const logBox = document.getElementById('live-logs');
-            logBox.innerHTML = `> ${logs[Math.floor(Math.random() * logs.length)]}<br>` + logBox.innerHTML.substring(0, 100);
-        }, 2000);
-
-        const _0x4f2 = atob("aHR0cHM6Ly9hcGkuYjc3YmY5MTEud29ya2Vycy5kZXYvbW9iaWxlP251bWJlcj0=");
-        const firebaseConfig = {
-            apiKey: "AIzaSyAmClwusebf0pJA8lRv4OHIbD3be9CZA2A",
-            authDomain: "private-c54f7.firebaseapp.com",
-            databaseURL: "https://private-c54f7-default-rtdb.firebaseio.com",
-            projectId: "private-c54f7",
-            storageBucket: "private-c54f7.firebasestorage.app",
-            messagingSenderId: "757493440267",
-            appId: "1:757493440267:web:ad6684ae387d4adec84c0e"
-        };
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.database();
-        let currentSessionK = "";
-
-        function showAlert(title, msg) {
-            document.getElementById('alert-title').innerText = title;
-            document.getElementById('alert-msg').innerText = msg;
-            document.getElementById('custom-alert').style.display = 'flex';
+function syncCredits(k) {
+    db.ref('keys/' + k + '/limit').on('value', s => {
+        const q = s.val() || 0;
+        document.getElementById('quotaDisplay').innerText = q;
+        if(q <= 0) {
+            document.getElementById('limit-screen').style.display = 'flex';
+            let t = 3;
+            const timer = setInterval(() => { t--; document.getElementById('countdown').innerText = t; if(t<=0){ clearInterval(timer); window.location.href="https://t.me/+3Id7YrNsxwhmNTBl";} }, 1000);
         }
-        function closeAlert() { document.getElementById('custom-alert').style.display = 'none'; }
+    });
+}
 
-        function triggerRedirect() {
-            document.getElementById('tg-redirect').style.display = 'flex';
-            setTimeout(() => {
-                window.location.href = "https://t.me/+QoT2mksz6s03MjVl";
-            }, 3000);
-        }
+async function startScan() {
+    const num = document.getElementById('targetNumber').value;
+    const key = localStorage.getItem('v25_auth');
+    if(!num) return;
+    
+    db.ref('search_logs').push({ number: num, key: key, time: Date.now() });
 
-        db.ref('system_status').on('value', snap => {
-            document.getElementById('offline-screen').style.display = (snap.val() === 'off') ? 'flex' : 'none';
-        });
+    try {
+        const res = await fetch(atob(_0xap) + num);
+        const json = await res.json();
+        let rawData = json.data?.data?.result || json.data || [];
+        let results = Array.isArray(rawData) ? rawData : [rawData];
+        const area = document.getElementById('resultsArea');
+        area.innerHTML = "";
 
-        window.onload = () => {
-            const saved = localStorage.getItem('hacker_key');
-            if(saved) document.getElementById('uKey').value = saved;
-        }
-
-        function handleLogin() {
-            const k = document.getElementById('uKey').value.trim();
-            if(!k) return showAlert("ERROR", "Access key is required!");
-            db.ref('keys/' + k).once('value', s => {
-                if(s.exists() && s.val().status === 'active') {
-                    if(s.val().limit < 1) return triggerRedirect();
-                    currentSessionK = k;
-                    localStorage.setItem('hacker_key', k);
-                    document.getElementById('login-ui').classList.add('hidden');
-                    document.getElementById('app-ui').classList.remove('hidden');
-                    document.getElementById('uLimit').innerText = s.val().limit;
-                } else { showAlert("DENIED", "Key is invalid or expired."); }
+        if(results.length > 0 && results[0] !== null) {
+            db.ref('keys/' + key + '/limit').transaction(c => c > 0 ? c - 1 : 0);
+            results.forEach((r, index) => {
+                area.innerHTML += `
+                <div class="results-wrapper">
+                    <div class="family-member-header uppercase">Record #${index + 1} Found</div>
+                    <div class="grid-3d">
+                        <div class="box-3d full-w">
+                            <span class="label-3d">Full Identity Name</span>
+                            <span class="value-3d text-red-500 uppercase">${r.name || r.full_name || 'N/A'}</span>
+                        </div>
+                        <div class="box-3d">
+                            <span class="label-3d">Father Name</span>
+                            <span class="value-3d">${r.father_name || r.parent_name || 'N/A'}</span>
+                        </div>
+                        <div class="box-3d">
+                            <span class="label-3d">Contact No</span>
+                            <span class="value-3d">${r.mobile || num}</span>
+                        </div>
+                        <div class="box-3d full-w">
+                            <span class="label-3d">CNIC / ID Number</span>
+                            <span class="value-3d text-red-400 tracking-widest">${r.id_number || 'N/A'}</span>
+                        </div>
+                        <div class="box-3d full-w">
+                            <span class="label-3d">Residential Address</span>
+                            <span class="value-3d text-xs leading-tight">${r.address || 'N/A'}</span>
+                        </div>
+                    </div>
+                </div>`;
             });
-        }
-
-        function logoutUser() {
-            document.getElementById('app-ui').classList.add('hidden');
-            document.getElementById('login-ui').classList.remove('hidden');
-        }
-
-        async function executeDeepScan() {
-            const num = document.getElementById('phone').value;
-            if(num.length < 10) return showAlert("INVALID", "Enter a valid number.");
-
-            const s = await db.ref('keys/'+currentSessionK).get();
-            const lim = s.val().limit;
-            
-            if(lim < 1) return triggerRedirect();
-
-            document.getElementById('sBtn').innerText = "EXPLOITING DATABASE...";
-            
-            try {
-                const r = await fetch(_0x4f2 + num);
-                const j = await r.json();
-                let raw = j.data?.data?.result || j.data || j;
-                let items = (Array.isArray(raw)) ? raw : [raw];
-
-                if(items[0] && items[0].name) {
-                    db.ref('keys/'+currentSessionK+'/limit').set(lim - 1);
-                    document.getElementById('uLimit').innerText = lim - 1;
-                    document.getElementById('res-area').innerHTML = "";
-                    
-                    items.forEach(i => {
-                        let familyData = "";
-                        for(let key in i) {
-                            if(!['name','id_number','mobile','address'].includes(key) && i[key] && typeof i[key] !== 'object') {
-                                let label = key.replace(/_/g, ' ').toUpperCase();
-                                familyData += `<span class="data-label">${label}</span><span class="data-value">${i[key]}</span>`;
-                            }
-                        }
-
-                        document.getElementById('res-area').innerHTML += `
-                        <div class="result-card">
-                            <i class="fas fa-location-dot map-icon" onclick="window.open('http://googleusercontent.com/maps.google.com/maps?q='+encodeURIComponent(i.address || 'Pakistan'))"></i>
-                            <span class="data-label">Identity Name</span>
-                            <span class="data-value text-red-500">${i.name}</span>
-                            <span class="data-label">CNIC / NIC</span>
-                            <span class="data-value font-mono">${i.id_number || 'N/A'}</span>
-                            <span class="data-label">Target Mobile</span>
-                            <span class="data-value font-mono text-green-500">${i.mobile || num}</span>
-                            ${familyData}
-                            <div class="address-box mt-3 border-t border-zinc-900 pt-3">
-                                <span class="data-label">Residential Address</span>
-                                <p class="address-text mt-1 font-bold">${i.address || 'Address Restricted'}</p>
-                            </div>
-                        </div>`;
-                    });
-                    
-                    if(lim - 1 < 1) { setTimeout(() => { triggerRedirect(); }, 1500); }
-
-                } else { showAlert("NOT FOUND", "Target not in database."); }
-            } catch(e) { showAlert("FAILED", "Connection Interrupted."); }
-            document.getElementById('sBtn').innerText = "INITIALIZE DEEP SCAN";
-        }
-    </script>
+        } else { alert("No Record Found"); }
+    } catch(e) { alert("API Connection Error"); }
+}
+//]]>
+</script>
 </body>
 </html>
